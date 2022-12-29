@@ -45,12 +45,7 @@ public static class UsersService
             throw new Exception("Username already exists.");
         }
         
-        if (adminCount)
-        {
-            throw new Exception("Cannot add more than 2 admins");
-            }
-             
-                users.Add(
+        users.Add(
             new User
             {
                 Username = username,
