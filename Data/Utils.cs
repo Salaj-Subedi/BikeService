@@ -48,7 +48,7 @@ public static class Utils
         Console.WriteLine(Environment.CurrentDirectory);
         return Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "Islington-Todo"
+            "BikeService"
         );
         
     }
@@ -58,8 +58,8 @@ public static class Utils
         return Path.Combine(GetAppDirectoryPath(), "users.json");
     }
 
-    public static string GetTodosFilePath(Guid userId)
+    public static string GetItemsFilePath(Guid userId)
     {
-        return Path.Combine(GetAppDirectoryPath(), userId.ToString() + "_todos.json");
+        return Path.Combine(GetAppDirectoryPath(), userId.ToString() + "_stock.json");
     } 
 }

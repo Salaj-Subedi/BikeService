@@ -38,8 +38,7 @@ public static class UsersService
     {
         List<User> users = GetAll();
         bool usernameExists = users.Any(x => x.Username == username);
-        int admincounter = users.Count(u => u.Role == Role.Admin);
-        bool adminCount = admincounter >= 2;
+      
         if (usernameExists)
         {
             throw new Exception("Username already exists.");

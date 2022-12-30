@@ -1,34 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace BikeService.Data
 {
     public class Stock
     {
-        private List<StockItem> _items;
 
-        public Stock()
-        {
-            _items = new List<StockItem>();
-        }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
-        public void AddItem(StockItem item)
-        {
-            _items.Add(item);
-        }
-
-        public void RemoveItem(StockItem item)
-        {
-            _items.Remove(item);
-        }
-
-        public List<StockItem> GetItems()
-        {
-            return _items;
-        }
+        [Required(ErrorMessage = "Please provide the Item name.")]
+        public string Name { get; set; }
+        [Required(ErrorMessage = "Please provide the Quantity")]
+        public int Quantity { get; set; }
+        public string ApprovedBy { get; set; }
+        public string TakenBy { get; set; }
+        public DateTime LastTaken { get; set; }
 
     }
+
 }
