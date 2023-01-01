@@ -2,6 +2,214 @@
 
 <h3>Inventory_Details</h3>
 
+<nav class="navbar navbar-light bg-light justify-content-between">
+    <h1 class="navbar-brand mb-0 h1">INVENTORY</h1>
+    @if (UserRole == Role.Admin)
+    {
+    <button class="btn btn-primary" type="button" @onclick="OpenAddItemDialog">
+        <span class="oi oi-plus" /> Add
+    </button>
+    }
+</nav>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               <div class="d-flex">
+                    Item
+                    <a class='btn text-@(_sortBy == "item" ? "primary" : "secondary")' data-mdb-toggle="tooltip"
+                       @onclick='()=>SortByHandler("item")'>
+                        <span class='oi oi-sort-@(_sortBy == "item" ? _sortDirection : "ascending")' />
+                    </a>
+                </div>
+            </th>
+            <th>
+                <div class="d-flex">
+                    Quantity In Stock
+                    <a class='btn text-@(_sortBy == "quantity" ? "primary" : "secondary")' data-mdb-toggle="tooltip"
+                       @onclick='()=>SortByHandler("quantity")'>
+                        <span class='oi oi-sort-@(_sortBy == "quantity" ? _sortDirection : "ascending")' />
+                    </a>
+                </div>
+            </th>
+            <th>
+                <div class="d-flex">
+                    Last Taken On
+                    <a class='btn text-@(_sortBy == "lastTaken" ? "primary" : "secondary")' data-mdb-toggle="tooltip"
+                       @onclick='()=>SortByHandler("lastTaken")'>
+                        <span class='oi oi-sort-@(_sortBy == "lastTaken" ? _sortDirection : "ascending")' />
+                    </a>
+                </div>
+            </th>
+            @if (UserRole == Role.Admin)
+            {
+                <th>
+                    <div class="d-flex">
+                        Approve Removal
+                        <a class='btn text-@(_sortBy == "Aprove" ? "primary" : "secondary")' data-mdb-toggle="tooltip"
+                       @onclick='()=>SortByHandler("status")'>
+                            <span class='oi oi-sort-@(_sortBy == "approve" ? _sortDirection : "ascending")' />
+                        </a>
+                    </div>
+                </th>
+            }
+            @if (UserRole == Role.Staff)
+            {
+                <th>
+                    <div class="d-flex">
+                    Request Approval
+                    <a class='btn text-@(_sortBy == "Request" ? "primary" : "secondary")' data-mdb-toggle="tooltip"
+                       @onclick='()=>SortByHandler("Request")'>
+                            <span class='oi oi-sort-@(_sortBy == "Request" ? _sortDirection : "ascending")' />
+                    </a>
+                </div>
+            </th>
+            }
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            IEnumerable<TodoItem> todoList = _todos;
+            if (_sortBy == "status")
+            {
+                todoList = _sortDirection == "ascending" ? todoList.OrderBy(t => t.IsDone) : todoList.OrderByDescending(t =>
+                t.IsDone);
+            }
+            else if (_sortBy == "taskName")
+            {
+                todoList = _sortDirection == "ascending" ? todoList.OrderBy(t => t.TaskName) : todoList.OrderByDescending(t =>
+                t.TaskName);
+            }
+            else if (_sortBy == "dueDate")
+            {
+                todoList = _sortDirection == "ascending" ? todoList.OrderBy(t => t.DueDate) : todoList.OrderByDescending(t =>
+                t.DueDate);
+            }
+            else if (_sortBy == "createdAt")
+            {
+                todoList = _sortDirection == "ascending" ? todoList.OrderBy(t => t.CreatedAt) : todoList.OrderByDescending(t =>
+                t.CreatedAt);
+            }
+
+            if (_tabFilter == "Due")
+            {
+                todoList = todoList.Where(t => !t.IsDone);
+            }
+            else if (_tabFilter == "Done")
+            {
+                todoList = todoList.Where(t => t.IsDone);
+            }
+
+            foreach (var todoItem in todoList)
+            {
+                <tr>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input me-0" type="checkbox" checked="@todoItem.IsDone"
+                               @onchange='()=>ToggleDone(todoItem)' />
+                        </div>
+                    </td>
+                    <td class='@(todoItem.IsDone ? "text-decoration-line-through" : "")'>@todoItem.TaskName</td>
+                    <td>
+                        @{
+                            bool isToday = !todoItem.IsDone && todoItem.DueDate == DateTime.Today;
+                            bool isOlder = !todoItem.IsDone && todoItem.DueDate < DateTime.Today;
+                            <p class='small mb-0 @(isToday ? "text-warning" : isOlder ? "text-danger" : "")'>
+                                @if (isToday || isOlder)
+                                {
+                                    <span class="oi oi-warning mr-3" />
+                                }
+                                @todoItem.DueDate.ToString("MMM dd, yyyy")
+                            </p>
+                        }
+                    </td>
+                    <td>
+                        <p class="small mb-0">
+                            @todoItem.CreatedAt.ToString("MMM dd, yyyy h:mm tt")
+                        </p>
+                    </td>
+                    <td>
+                        <button disabled="@todoItem.IsDone" class="btn btn-outline-secondary" type="button"
+                            @onclick="()=>OpenEditTodoDialog(todoItem)">
+                            <span class="oi oi-pencil" /> Edit
+                        </button>
+                        <button class="btn btn-outline-danger" type="button" @onclick="()=>OpenDeleteTodoDialog(todoItem)">
+                            <span class="oi oi-delete" /> Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@code{
+    private string _dialogTitle { get; set; }
+    private string _dialogOkLabel { get; set; }
+    private void OpenAddTodoDialog()
+    {
+        _dialogTitle = "Add Item";
+        _dialogOkLabel = "Add";
+        
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @code {
 
 }

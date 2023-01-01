@@ -42,24 +42,18 @@ public static class Utils
         return CryptographicOperations.FixedTimeEquals(inputHash, hash);
     }
 
+    
     public static string GetAppDirectoryPath()
     {
-
-        Console.WriteLine(Environment.CurrentDirectory);
-        return Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "BikeService"
-        );
-        
+        return "D:\\COLLEGE\\YEAR3\\APPLICATION DEV .NET\\COURSEWORK\\PROJECT\\BikeService";
     }
-
     public static string GetAppUsersFilePath()
     {
         return Path.Combine(GetAppDirectoryPath(), "users.json");
     }
-
-    public static string GetItemsFilePath(Guid userId)
+    public static string GetItemsFilePath()
     {
-        return Path.Combine(GetAppDirectoryPath(), userId.ToString() + "_stock.json");
-    } 
+        string appDataDirectoryPath = Utils.GetAppDirectoryPath();
+        return Path.Combine(appDataDirectoryPath, "Inventories.json");
+    }
 }
